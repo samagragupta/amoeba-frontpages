@@ -25,24 +25,6 @@ jobs:
         cd online.codingblocks.com
         yarn install --frozen-lockfile
         yarn build:prod
-      
-    - name: Deploy to staging
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.PRIVATE_KEY }}
-        script: | 
-          cd ~/frontends/amoeba-frontpages-staging/online.codingblocks.com && \
-          git checkout development && \
-          git fetch --all --prune && \
-          git reset --hard origin/development && \
-          git pull && \
-            ulimit -S -n 65000 && \
-            nvm use && \
-          yarn && yarn build:staging && \
-          nvm use 12 && \
-          NODE_ENV=staging pm2 restart amoeba-frontpages-staging
     
     - name: Get yarn cache directory path
       id: yarn-cache-dir-path
